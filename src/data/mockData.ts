@@ -104,7 +104,7 @@ export const mockCertificates: Certificate[] = [
     type: 'business_license',
     name: '营业执照',
     imageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop',
-    status: 'approved',
+    status: 'expired',
     submitTime: '2024-01-15 10:30',
     reviewTime: '2024-01-16 14:20',
     reviewer: '李管理员',

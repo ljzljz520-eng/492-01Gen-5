@@ -33,9 +33,11 @@ export default function InspectorScan() {
 
   const handleStartScan = () => {
     setShowScanAnimation(true);
-    // 模拟扫码过程
+    setScanResult(null);
     setTimeout(() => {
-      const randomStall = stalls[Math.floor(Math.random() * stalls.length)];
+      const availableStalls = stalls.filter((s) => s.id !== scanResult);
+      const pool = availableStalls.length > 0 ? availableStalls : stalls;
+      const randomStall = pool[Math.floor(Math.random() * pool.length)];
       setScanResult(randomStall.id);
       setShowScanAnimation(false);
     }, 2000);

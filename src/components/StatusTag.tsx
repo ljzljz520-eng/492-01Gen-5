@@ -20,7 +20,7 @@ const statusColorMap: Record<string, string> = {
   pending: 'bg-warning-100 text-warning-700 border-warning-200',
   approved: 'bg-success-100 text-success-700 border-success-200',
   rejected: 'bg-danger-100 text-danger-700 border-danger-200',
-  expired: 'bg-gray-100 text-gray-600 border-gray-200',
+  expired: 'bg-danger-100 text-danger-700 border-danger-200',
   processing: 'bg-primary-100 text-primary-700 border-primary-200',
   resolved: 'bg-success-100 text-success-700 border-success-200',
   closed: 'bg-gray-100 text-gray-500 border-gray-200',
@@ -28,7 +28,7 @@ const statusColorMap: Record<string, string> = {
   completed: 'bg-primary-100 text-primary-700 border-primary-200',
   verified: 'bg-success-100 text-success-700 border-success-200',
   active: 'bg-success-100 text-success-700 border-success-200',
-  suspended: 'bg-gray-100 text-gray-600 border-gray-200',
+  suspended: 'bg-danger-100 text-danger-700 border-danger-200',
 };
 
 export default function StatusTag({

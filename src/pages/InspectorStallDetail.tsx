@@ -27,7 +27,7 @@ import {
   businessCategories,
   Inspection,
 } from '@/types';
-import { cn } from '@/lib/utils';
+import { cn, checkStallCompliance, isCertificateValid } from '@/lib/utils';
 
 export default function InspectorStallDetail() {
   const { id } = useParams<{ id: string }>();
@@ -48,8 +48,8 @@ export default function InspectorStallDetail() {
     (a, b) => new Date(b.inspectTime).getTime() - new Date(a.inspectTime).getTime()
   );
 
-  const approvedCerts = stallCerts.filter((c) => c.status === 'approved');
-  const isFullyCompliant = approvedCerts.length >= 4;
+  const compliance = checkStallCompliance(stall, stallCerts);
+  const isFullyCompliant = compliance.isFullyCompliant;
 
   const certTypeIcons: Record<string, React.ReactNode> = {
     business_license: <FileText className="w-5 h-5" />,
@@ -157,9 +157,21 @@ export default function InspectorStallDetail() {
                     {isFullyCompliant ? '经营合规' : '存在问题'}
                   </span>
                 </div>
-                <p className="text-white/80">
-                  证照已通过 {approvedCerts.length}/4 项
+                <p className="text-white/80 mb-2">
+                  有效证照 {compliance.validCertCount}/{compliance.totalCerts} 项
                 </p>
+                {compliance.reasons.length > 0 && (
+                  <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+                    <ul className="text-sm text-white/90 space-y-1">
+                      {compliance.reasons.map((reason, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <XCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                          {reason}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
               <div className="text-right">
                 <h2 className="text-3xl font-bold mb-1">{stall.stallName}</h2>
@@ -206,11 +218,11 @@ export default function InspectorStallDetail() {
                         key={type}
                         className={cn(
                           'p-4 rounded-xl border transition-all',
-                          cert?.status === 'approved'
+                          isCertificateValid(cert)
                             ? 'bg-success-50/50 border-success-200'
                             : cert?.status === 'pending'
                             ? 'bg-warning-50/50 border-warning-200'
-                            : cert?.status === 'rejected'
+                            : cert?.status === 'expired' || cert?.status === 'rejected'
                             ? 'bg-danger-50/50 border-danger-200'
                             : 'bg-gray-50 border-gray-200'
                         )}
@@ -219,11 +231,11 @@ export default function InspectorStallDetail() {
                           <div
                             className={cn(
                               'w-10 h-10 rounded-lg flex items-center justify-center',
-                              cert?.status === 'approved'
+                              isCertificateValid(cert)
                                 ? 'bg-success-100 text-success-600'
                                 : cert?.status === 'pending'
                                 ? 'bg-warning-100 text-warning-600'
-                                : cert?.status === 'rejected'
+                                : cert?.status === 'expired' || cert?.status === 'rejected'
                                 ? 'bg-danger-100 text-danger-600'
                                 : 'bg-gray-100 text-gray-400'
                             )}
